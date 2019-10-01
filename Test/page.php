@@ -23,9 +23,9 @@ tr:nth-child(even) {
 </style>
 <div style="width:700px; margin:0 auto;  ">
 <div>
-<h3 style="color:black" ><strong>Welcome to my Generator API !</strong></h3>   
+<h3 ><strong>Welcome to my Generator API !</strong></h3>
 <form  method="POST">
-<label style="color:black">Enter KeyName:</label><br />
+<br />
 
 <input type="text" name="keyName" placeholder="Enter the KeyName" required/>
 <input type="submit" name="delete" value="Delete the key"/>
@@ -33,6 +33,9 @@ tr:nth-child(even) {
 </form>
 <form method="post">
 <input type="submit" name="show" value="Show keys"/>
+<br></br>
+<input type="submit" name="order" value="Order Keys by date"/>
+
 <hr>
 <table >
 <tr >
@@ -40,7 +43,7 @@ tr:nth-child(even) {
 <th >keyValue</th>
 <th >keyDate</th>
 </tr>
-</form>    
+</form>
 
 <?php
 
@@ -62,10 +65,51 @@ class RestAPI{
       if ($this->conn->connect_error) {
           die("Connection failed: " . $this->conn->connect_error);
       }
-     
+
   }
 
-  
+function orderKeysByDate()
+{
+  //connect to the db
+      $this->connect();
+  //request
+  $sql = "SELECT * FROM `keygenerated` ORDER BY dateTime";
+
+  $result = $this->conn->query($sql);
+
+  if ($result->num_rows > 0) {
+      // output data of each row
+      while($row = $result->fetch_assoc()) {
+
+          $post_item=array(
+              'keyValue'=> $row["keyValue"],
+              'keyName'=>$row["keyName"],
+              'dateTime'=> $row["dateTime"]
+          );
+
+          $keyname=$row['keyName'];
+          $keyval=$row['keyValue'];
+          $keydate=$row['dateTime'];
+
+          { echo "<tr>";
+            echo "<td>" . $keyname ."</td>";
+            echo "<td>" . $keyval. "</td>";
+            echo "<td>" .$keydate . "</td>";
+            echo "</tr>";
+
+
+
+          }
+
+
+          }
+  } else {
+      echo "0 results";
+  }
+
+  $this->conn->close();
+}
+
  function showKeys(){
   //connect to the db
       $this->connect();
@@ -76,35 +120,35 @@ class RestAPI{
   if ($result->num_rows > 0) {
       // output data of each row
       while($row = $result->fetch_assoc()) {
-       
+
           $post_item=array(
               'keyValue'=> $row["keyValue"],
               'keyName'=>$row["keyName"],
               'dateTime'=> $row["dateTime"]
           );
-        
+
           $keyname=$row['keyName'];
           $keyval=$row['keyValue'];
           $keydate=$row['dateTime'];
-         
+
           { echo "<tr>";
             echo "<td>" . $keyname ."</td>";
             echo "<td>" . $keyval. "</td>";
             echo "<td>" .$keydate . "</td>";
             echo "</tr>";
 
-           
-           
+
+
           }
-   
-        
+
+
           }
   } else {
       echo "0 results";
   }
-  
+
   $this->conn->close();
- } 
+ }
 
  function deleteKey($key_name)
  {
@@ -115,7 +159,7 @@ class RestAPI{
  }
 
  function addKey($key_name)
- {    
+ {
        $this->connect();
        $newkey= $this->generateKey();
        $sql1 = "INSERT INTO keygenerated (keyName,keyValue,dateTime) VALUES ('".$key_name."','".$newkey."','".date("Y-m-d H:i:s")."')";
@@ -135,7 +179,7 @@ class RestAPI{
   else
   while($row = $result->fetch_assoc() && $i<$result->num_rows && $keyExists==false )
   { //si la clé existe
-      if($row["keyValue"]==$key) 
+      if($row["keyValue"]==$key)
       {   $sql = "SELECT keyValue FROM ".$this->tablename;
           $result = $this->conn->query($sql);
           $key=substr(str_shuffle($permitted_chars), 0, 10);
@@ -143,7 +187,7 @@ class RestAPI{
       }
       $i++;
   }
-  echo 'key '.$key.' generated successfully!';
+
    return $key;
 }
 
@@ -163,15 +207,21 @@ class RestAPI{
         }
         { if(isset($_POST['show']))
             $restapi->showKeys();
-            
-        }
 
         }
+
+
+        }
+        { if(isset($_POST['order']))
+            $restapi->orderKeysByDate();
+
+        }
+
    // }
 
 
 
- 
+
 
 
 
