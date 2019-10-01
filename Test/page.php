@@ -24,9 +24,10 @@ tr:nth-child(even) {
 <div style="width:700px; margin:0 auto; ">
 <div>
 <h3 style="color:black" ><strong>Welcome to my Generator API !</strong></h3>   
-<form action="" method="POST">
+<form  method="POST">
 <label style="color:black">Enter KeyName:</label><br />
-<input type="text" name="keyName" placeholder="Enter the KeyName" required/>
+
+<input type="text" name="keyName" placeholder="Enter the KeyName"/>
 <input type="submit" name="delete" value="Delete the key"/>
 <input type="submit" name="add" value="Generate key"/>
 <input type="submit" name="show" value="Show keys"/>
@@ -149,8 +150,7 @@ class RestAPI{
 }
 
   $restapi=new RestAPI();
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   echo 'here';
+ // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add'])) {
         // btnDelete
         $restapi->addKey($_POST['keyName']);
@@ -161,14 +161,13 @@ class RestAPI{
             $restapi->deleteKey($_POST['keyName']);
 
         }
-        { if(($_POST['show']))
+        { if(isset($_POST['show']))
             $restapi->showKeys();
-          
             
         }
 
         }
-    }
+   // }
 
 
 
