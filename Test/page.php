@@ -21,21 +21,21 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 </style>
-<div style="width:700px; margin:0 auto; ">
+<div style="width:700px; margin:0 auto;  ">
 <div>
 <h3 style="color:black" ><strong>Welcome to my Generator API !</strong></h3>   
 <form  method="POST">
 <label style="color:black">Enter KeyName:</label><br />
 
-<input type="text" name="keyName" placeholder="Enter the KeyName"/>
+<input type="text" name="keyName" placeholder="Enter the KeyName" required/>
 <input type="submit" name="delete" value="Delete the key"/>
 <input type="submit" name="add" value="Generate key"/>
+</form>
+<form method="post">
 <input type="submit" name="show" value="Show keys"/>
-
 <hr>
 <table >
-<tr  >
-
+<tr >
 <th >keyName </th>
 <th >keyValue</th>
 <th >keyDate</th>
